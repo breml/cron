@@ -102,7 +102,7 @@ func TestSpecSchedule(t *testing.T) {
 		expected Schedule
 	}{
 		{"* 5 * * * *", &SpecSchedule{all(seconds), 1 << 5, all(hours), all(dom), all(months), all(dow)}},
-		{"@every 5m", ConstantDelaySchedule{time.Duration(5) * time.Minute}},
+		{"@every 5m", ConstantDelaySchedule{time.Duration(5) * time.Minute, time.Unix(0, 0)}},
 	}
 
 	for _, c := range entries {

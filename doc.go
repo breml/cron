@@ -99,6 +99,18 @@ Note: The interval does not take the job runtime into account.  For example,
 if a job takes 3 minutes to run, and it is scheduled to run every 5 minutes,
 it will have only 2 minutes of idle time between each run.
 
+For fixed intervals it is also possible to define the delay for the first run.
+
+    @every <duration>,<firstduration>
+    @every <duration>,@rand
+
+<firstduration> is a string accepted by time.ParseDuration, which may be e.g. 0s
+to schedule the first run immediatly.
+With the special string "@rand" it is possible to schedule the first run at
+a random delay between 0s (immediatly) and <duration>.
+This option helps to distribute jobs inside the same interval to better
+distribute the load for the system.
+
 Time zones
 
 All interpretation and scheduling is done in the machine's local time zone (as

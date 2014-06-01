@@ -219,9 +219,23 @@ func parseDescriptor(spec string) Schedule {
 
 	const every = "@every "
 	if strings.HasPrefix(spec, every) {
-		duration, err := time.ParseDuration(spec[len(every):])
+		everyparts := strings.Split(spec[len(every):], ",")
+		duration, err := time.ParseDuration(everyparts[0])
 		if err != nil {
 			log.Panicf("Failed to parse duration %s: %s", spec, err)
+		}
+		if len(everyparts) == 2 {
+			initial := strings.Trim(everyparts[1], " ")
+			const rand = "@rand"
+			if initial == rand {
+				return EveryWithRandInitial(duration)
+			} else {
+				initialDuration, err := time.ParseDuration(initial)
+				if err != nil {
+					log.Panicf("Failed to parse duration %s: %s", spec, err)
+				}
+				return EveryWithInitial(duration, initialDuration)
+			}
 		}
 		return Every(duration)
 	}
